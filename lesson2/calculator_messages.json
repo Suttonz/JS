@@ -1,0 +1,24 @@
+{
+"en": {
+"welcomeMessage": "Welcome to Calculator!\n",
+"firstNumber": "What's the first number?",
+"secondNumber": "What's the second number?",
+"invaildNumber": "hmm ...that does not look like a vaild number.",
+"operation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+"anotherCalculation": "Do you want to do another calculation? (Yes/No)",
+"invaildAnswer":"you need to input yes or no",
+"invaildOperation":"You must choose 1,2,3 or 4.",
+"result":"The result is:"
+},
+"cn":{
+  "welcomeMessage": "欢迎来到计算器!",
+  "firstNumber": "第一个数字?",
+  "secondNumber": "第二个数字?",
+  "invaildNumber": "这看起来不像一个数字啊..",
+  "operation": "你想做什么计算?\n1) 加法 2) 减法 3) 乘法 4) 触法",
+  "anotherCalculation": "你想再进行一次计算么? (Yes/No)",
+  "invaildAnswer":"你需要回答yes或者no",
+  "invaildOperation":"你必须选择 1,2,3 or 4.",
+  "result":"计算结果是:"
+ }
+}
