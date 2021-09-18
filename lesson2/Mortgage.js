@@ -1,5 +1,6 @@
-const readline = require('readline-sync');
-const messages = require('./mortgage_messages.json');
+const READLINE = require('readline-sync');
+const MESSAGES = require('./mortgage_messages.json');
+let doAnotherCalculation;
 
 function prompt(message) {
 
@@ -9,7 +10,7 @@ function prompt(message) {
 
 function displayMessages(messageKey) {
 
-  return messages[messageKey];
+  return MESSAGES[messageKey];
 
 }
 
@@ -51,9 +52,6 @@ function monthlyPaymentCalculation
 
 }
 
-
-let doAnotherCalculation;
-
 prompt(displayMessages('welcome'));
 prompt(displayMessages('resultReminder'));
 
@@ -62,22 +60,22 @@ do {
 
   //ask for loan amount ,it has to be a positive non-zero number
   prompt(displayMessages('loanAmount'));
-  let loanAmount = readline.question();
+  let loanAmount = READLINE.question();
 
   while (invaildLoanAmount(loanAmount)) {
 
     prompt(displayMessages('invaildLoanAmount'));
-    loanAmount = readline.question();
+    loanAmount = READLINE.question();
 
   }
   //ask for APR , input has to be a postive number (including 0) in %
   prompt(displayMessages('APR'));
-  let annualPercentageRate = readline.question();
+  let annualPercentageRate = READLINE.question();
 
   while (invaildAPR(annualPercentageRate)) {
 
     prompt(displayMessages('invaildAPR'));
-    annualPercentageRate = readline.question();
+    annualPercentageRate = READLINE.question();
 
   }
 
@@ -85,23 +83,23 @@ do {
   //years has to be a non-zero positive integer
   prompt(displayMessages('loanDuration'));
   prompt(displayMessages('durationInYears'));
-  let years = readline.question();
+  let years = READLINE.question();
 
   while (invaildYears(years)) {
 
     prompt(displayMessages('invaildYear'));
-    years = readline.question();
+    years = READLINE.question();
 
   }
 
   // monthes can be empty input or any intger including 0
   prompt(displayMessages('durationInMonthes'));
-  let monthes = readline.question();
+  let monthes = READLINE.question();
 
   while (invaildMonthes(monthes)) {
 
     prompt(displayMessages('invaildMonth'));
-    monthes = readline.question();
+    monthes = READLINE.question();
   }
 
   //varify if monthes is empty input or another case
@@ -127,7 +125,7 @@ do {
   } else {
 
     monthlyPayment = monthlyPaymentCalculation(loanAmountInNumber,
-      monthlyInterestRate,loanDuration);
+    monthlyInterestRate,loanDuration);
     //calculating total interest
   }
 
@@ -139,13 +137,13 @@ do {
   //ask user if they want another mortgage calculation
 
   prompt(displayMessages('anotherCalculation'));
-  let answer = readline.question();
+  let answer = READLINE.question();
 
   //user input cannot be empty or anything other than y or n
   while (answer.length === 0 || (answer.toLowerCase() !== 'y' && answer.toLowerCase() !== 'n')) {
 
     prompt(displayMessages('invaildAnswer'));
-    answer = readline.question();
+    answer = READLINE.question();
 
   }
 
@@ -154,8 +152,9 @@ do {
     doAnotherCalculation = true;
 
   } else {
-    doAnotherCalculation = false;
-  }
 
+    doAnotherCalculation = false;
+    
+  }
 
 } while (doAnotherCalculation);
