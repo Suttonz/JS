@@ -11,7 +11,7 @@
   "totalNumberOfPayments":"You have total number of payments: ",
   "invalidLoanAmount": "hmm..something is wrong..a valid total non - zero amount is required!",
   "invalidAPR": "hmm...something is wrong..a postive (including 0) rate is required!",
-  "invalidYear": "a positive non - zero integer for year is required!",
+  "invalidYear": "a positive integer including 0 for year is required!",
   "invalidMonth": "you can keep it empty or you need to input a positive integer (including 0) for months!",
   "anotherCalculation": "Do you want to do another mortgage calculation?(y/n)",
   "invalidAnswer":"You need to answer y(yes) or n(no)"

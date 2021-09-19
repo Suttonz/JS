@@ -20,7 +20,7 @@ function invalidAPR(aprInput) {
 }
 
 function invalidYears(yearsInput) {
-  return yearsInput.trimStart() === '' || !(Number.isInteger(Number(yearsInput))) || Number(yearsInput) <= 0;
+  return yearsInput.trimStart() === '' || !(Number.isInteger(Number(yearsInput))) || Number(yearsInput) < 0;
 }
 
 function invaliddMonths(monthesInput) {
@@ -31,15 +31,15 @@ function getMonthlyPayment(loanAmount,apr,loanDuration) {
 
   let monthlyInterestRate = (Number(apr) * 0.01) / loanDuration;
   let monthlyLoanPayment;
-  
+
   //loan without interest
   if (monthlyInterestRate === 0) {
-    monthlyLoanPayment = loanAmountInNumber / loanDuration;
+    monthlyLoanPayment = loanAmount / loanDuration;
   } else {
     //loan with interest
     monthlyLoanPayment = loanAmount *
                      (monthlyInterestRate /
-                     (1 - 
+                     (1 -
                       Math.pow((1 + monthlyInterestRate), (-loanDuration))
                      ));
   }
@@ -47,7 +47,7 @@ function getMonthlyPayment(loanAmount,apr,loanDuration) {
   return monthlyLoanPayment;
 }
 
-function getLoanAmount() {  
+function getLoanAmount() {
   prompt(displayMessages('loanAmount'));
   let loanInTotal = READLINE.question();
 
@@ -97,20 +97,20 @@ function getLoanDuration () {
   return loanTotalTime;
 }
 
-function decideIfdoAnotherCal(){
+function decideIfdoAnotherCal() {
   prompt(displayMessages('anotherCalculation'));
   let answer = READLINE.question();
 
-  while (answer.length === 0 || VAILD_ANSWERS.includes(answer.toLowerCase())) {
+  while (answer.length === 0 || !VAILD_ANSWERS.includes(answer.toLowerCase())) {
     prompt(displayMessages('invalidAnswer'));
     answer = READLINE.question();
   }
 
-  if (answer.toLowerCase() === 'y') {
+  if (answer.toLowerCase() === 'y'|| answer.toLowerCase() === 'yes') {
     doAnotherCalculation = true;
     console.clear();
   } else {
-    doAnotherCalculation = false; 
+    doAnotherCalculation = false;
     prompt('Goodbye! Thanks for using mortgage calculator!');
   }
 }
@@ -124,7 +124,8 @@ do {
   let loanAmount = getLoanAmount();
   let annualPercentageRate = getAPR();
   let loanDuration = getLoanDuration();
-  let monthlyPayment = getMonthlyPayment(loanAmount,annualPercentageRate,loanDuration);
+  let monthlyPayment = getMonthlyPayment(loanAmount,
+    annualPercentageRate,loanDuration);
 
   prompt(displayMessages('monthlyPayment') + monthlyPayment.toFixed(2));
   prompt(displayMessages('totalNumberOfPayments') + loanDuration);
