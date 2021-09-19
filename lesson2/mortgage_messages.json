@@ -1,19 +1,19 @@
 {
 
   "welcome": "Welcome to Mortgage Calculator!",
-  "resultReminder":"-Our calculation will show the result up to two digits after decimel point-",
+  "resultReminder":"-Our calculation will show the result up to two digits after decimal point-",
   "loanAmount": "Please input your expected total loan amount: ",
-  "APR": "Please input your expected (APR) the Annual Percentage Rate (in %):",
+  "APR": "Please input your expected (APR) the Annual Percentage Rate:(example. 5, 0.5)",
   "loanDuration": "Please input your expected total loan duration:",
   "durationInYears":"How many years?",
-  "durationInMonthes":"How many months?",
+  "durationInMonths":"How many months?",
   "monthlyPayment": "Your monthly payment is: ",
   "totalNumberOfPayments":"You have total number of payments: ",
-  "invaildLoanAmount": "hmm..something is wrong..a vaild total non zero amount is required!",
-  "invaildAPR": "hmm...something is wrong..a postive (including 0) rate is required!",
-  "invaildYear": "a positive non - zero integer for year is required!",
-  "invaildMonth": "you can keep it empty or you need to input an positive intger (including 0) for monthes!",
-  "anotherCalculation": "Do you want to do another motrage calculation?(y/n)",
-  "invaildAnswer":"You need to answer y(yes) or n(no)"
+  "invalidLoanAmount": "hmm..something is wrong..a valid total non - zero amount is required!",
+  "invalidAPR": "hmm...something is wrong..a postive (including 0) rate is required!",
+  "invalidYear": "a positive non - zero integer for year is required!",
+  "invalidMonth": "you can keep it empty or you need to input a positive integer (including 0) for months!",
+  "anotherCalculation": "Do you want to do another mortgage calculation?(y/n)",
+  "invalidAnswer":"You need to answer y(yes) or n(no)"
 
 }

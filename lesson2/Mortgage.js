@@ -1,160 +1,133 @@
 const READLINE = require('readline-sync');
 const MESSAGES = require('./mortgage_messages.json');
 let doAnotherCalculation;
+const VAILD_ANSWERS = ['y','yes','n','no'];
 
 function prompt(message) {
-
   console.log (`=> ${message}`);
-
 }
 
 function displayMessages(messageKey) {
-
   return MESSAGES[messageKey];
-
 }
 
-function invaildLoanAmount(loanInput) {
-
+function invalidLoanAmount(loanInput) {
   return loanInput.trimStart() === '' || Number.isNaN(Number(loanInput)) || Number(loanInput) <= 0;
-
 }
 
-function invaildAPR(aprInput) {
-
+function invalidAPR(aprInput) {
   return aprInput.trimStart() === '' || Number.isNaN(Number(aprInput)) || Number(aprInput) < 0;
-
 }
 
-function invaildYears(yearsInput) {
-
+function invalidYears(yearsInput) {
   return yearsInput.trimStart() === '' || !(Number.isInteger(Number(yearsInput))) || Number(yearsInput) <= 0;
-
 }
 
-function invaildMonthes(monthesInput) {
-
+function invaliddMonths(monthesInput) {
   return !(Number.isInteger(Number(monthesInput))) || Number(monthesInput) < 0;
-
 }
 
-function monthlyPaymentCalculation
-(loanAmount,monthlyInterestRate,loanDuration) {
+function getMonthlyPayment(loanAmount,apr,loanDuration) {
 
-  let monthlyPayment;
-  monthlyPayment = loanAmount *
-                   (monthlyInterestRate /
-                   (1 - 
-                    Math.pow((1 + monthlyInterestRate), (-loanDuration))
-                   ));
+  let monthlyInterestRate = (Number(apr) * 0.01) / loanDuration;
+  let monthlyLoanPayment;
+  
+  //loan without interest
+  if (monthlyInterestRate === 0) {
+    monthlyLoanPayment = loanAmountInNumber / loanDuration;
+  } else {
+    //loan with interest
+    monthlyLoanPayment = loanAmount *
+                     (monthlyInterestRate /
+                     (1 - 
+                      Math.pow((1 + monthlyInterestRate), (-loanDuration))
+                     ));
+  }
 
-  return monthlyPayment;
-
+  return monthlyLoanPayment;
 }
+
+function getLoanAmount() {  
+  prompt(displayMessages('loanAmount'));
+  let loanInTotal = READLINE.question();
+
+  while (invalidLoanAmount(loanInTotal)) {
+    prompt(displayMessages('invalidLoanAmount'));
+    loanInTotal = READLINE.question();
+  }
+
+  return Number(loanInTotal);
+}
+
+function getAPR() {
+  prompt(displayMessages('APR'));
+  let apr = READLINE.question();
+
+  while (invalidAPR(apr)) {
+    prompt(displayMessages('invalidAPR'));
+    apr = READLINE.question();
+  }
+
+  return Number(apr);
+}
+
+function getLoanDuration () {
+  prompt(displayMessages('loanDuration'));
+  prompt(displayMessages('durationInYears'));
+  let years = READLINE.question();
+
+  while (invalidYears(years)) {
+    prompt(displayMessages('invalidYear'));
+    years = READLINE.question();
+  }
+
+  prompt(displayMessages('durationInMonths'));
+  let months = READLINE.question();
+
+  while (invaliddMonths(months)) {
+    prompt(displayMessages('invalidMonth'));
+    months = READLINE.question();
+  }
+
+  if (months.trimStart() === '') {
+    months = 0;
+  }
+
+  let loanTotalTime = (Number(years) * 12) + (Number(months));
+  return loanTotalTime;
+}
+
+function decideIfdoAnotherCal(){
+  prompt(displayMessages('anotherCalculation'));
+  let answer = READLINE.question();
+
+  while (answer.length === 0 || VAILD_ANSWERS.includes(answer.toLowerCase())) {
+    prompt(displayMessages('invalidAnswer'));
+    answer = READLINE.question();
+  }
+
+  if (answer.toLowerCase() === 'y') {
+    doAnotherCalculation = true;
+    console.clear();
+  } else {
+    doAnotherCalculation = false; 
+    prompt('Goodbye! Thanks for using mortgage calculator!');
+  }
+}
+
 
 prompt(displayMessages('welcome'));
 prompt(displayMessages('resultReminder'));
 
 do {
 
-
-  //ask for loan amount ,it has to be a positive non-zero number
-  prompt(displayMessages('loanAmount'));
-  let loanAmount = READLINE.question();
-
-  while (invaildLoanAmount(loanAmount)) {
-
-    prompt(displayMessages('invaildLoanAmount'));
-    loanAmount = READLINE.question();
-
-  }
-  //ask for APR , input has to be a postive number (including 0) in %
-  prompt(displayMessages('APR'));
-  let annualPercentageRate = READLINE.question();
-
-  while (invaildAPR(annualPercentageRate)) {
-
-    prompt(displayMessages('invaildAPR'));
-    annualPercentageRate = READLINE.question();
-
-  }
-
-  //ask for loan duration , it has two parts : years and monthes
-  //years has to be a non-zero positive integer
-  prompt(displayMessages('loanDuration'));
-  prompt(displayMessages('durationInYears'));
-  let years = READLINE.question();
-
-  while (invaildYears(years)) {
-
-    prompt(displayMessages('invaildYear'));
-    years = READLINE.question();
-
-  }
-
-  // monthes can be empty input or any intger including 0
-  prompt(displayMessages('durationInMonthes'));
-  let monthes = READLINE.question();
-
-  while (invaildMonthes(monthes)) {
-
-    prompt(displayMessages('invaildMonth'));
-    monthes = READLINE.question();
-  }
-
-  //varify if monthes is empty input or another case
-  if (monthes.trimStart() === '') {
-    monthes = 0;
-  }
-
-  //mortgage calculation process
-
-  //calculate monthly interest rate
-  let loanDuration = (Number(years) * 12) + (Number(monthes));
-  let monthlyInterestRate = (Number(annualPercentageRate) * 0.01)
-                            / loanDuration;
-  let loanAmountInNumber = Number(loanAmount);
-
-  // mortgage that has interest or no interest
-  let monthlyPayment;
-
-  if (monthlyInterestRate === 0) {
-
-    monthlyPayment = loanAmountInNumber / loanDuration;
-
-  } else {
-
-    monthlyPayment = monthlyPaymentCalculation(loanAmountInNumber,
-    monthlyInterestRate,loanDuration);
-    //calculating total interest
-  }
+  let loanAmount = getLoanAmount();
+  let annualPercentageRate = getAPR();
+  let loanDuration = getLoanDuration();
+  let monthlyPayment = getMonthlyPayment(loanAmount,annualPercentageRate,loanDuration);
 
   prompt(displayMessages('monthlyPayment') + monthlyPayment.toFixed(2));
   prompt(displayMessages('totalNumberOfPayments') + loanDuration);
-  prompt('monthly interest rate is:' + monthlyInterestRate);
-
-
-  //ask user if they want another mortgage calculation
-
-  prompt(displayMessages('anotherCalculation'));
-  let answer = READLINE.question();
-
-  //user input cannot be empty or anything other than y or n
-  while (answer.length === 0 || (answer.toLowerCase() !== 'y' && answer.toLowerCase() !== 'n')) {
-
-    prompt(displayMessages('invaildAnswer'));
-    answer = READLINE.question();
-
-  }
-
-  if (answer.toLowerCase() === 'y') {
-
-    doAnotherCalculation = true;
-
-  } else {
-
-    doAnotherCalculation = false;
-    
-  }
+  decideIfdoAnotherCal();
 
 } while (doAnotherCalculation);
