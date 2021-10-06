@@ -5,7 +5,7 @@ const VALUES = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace'
 const SPECIAL_VALUES = ['Jack','Queen','King'];
 const MAX_NUM = 21;
 const MIN_NUM_DEALER = 17;
-const WINNING_SCORE = 2;
+const WINNING_SCORE = 5;
 
 let holdCards = {
   player:[],
@@ -15,7 +15,7 @@ let holdCards = {
 let matchScore = {
   player:0,
   dealer:0
-}
+};
 
 let roundNum = 0;
 
@@ -34,7 +34,7 @@ function printWelcomeMessage() {
 
 function pressEnterToContinue() {
   while (true) {
-    prompt (`**** Press enter to continue  ****`);
+    prompt (`**** Press ENTER to continue  ****`);
     let answer = readline.question();
     if (answer === '') break;
   }
@@ -72,21 +72,21 @@ function dealCards(deck,who,num) {
 
 function calculateTotalPoints(cards) {
   let sum = 0;
-  if (Array.isArray(cards)){
+  if (Array.isArray(cards)) {
     cards.forEach(card => {
-    if (SPECIAL_VALUES.includes(card[1])) {
-      sum += 10;
-    } else if (card[1] === 'Ace') {
-      sum += 11;
-    } else {
-      sum += Number(card[1]);
-    }
+      if (SPECIAL_VALUES.includes(card[1])) {
+        sum += 10;
+      } else if (card[1] === 'Ace') {
+        sum += 11;
+      } else {
+        sum += Number(card[1]);
+      }
     });
 
     cards.filter(card => card[1] === 'Ace').forEach( _ => {
-    if (sum > MAX_NUM) {
-      sum -= 10;
-    }
+      if (sum > MAX_NUM) {
+        sum -= 10;
+      }
     });
   }
   return sum;
@@ -110,15 +110,14 @@ function printCards(who) {
 
 
 function playerTurn(deck) {
-
   prompt(`&&&&&&&& Player' turn &&&&&&&&&&`);
   while (true) {
     prompt(`You want to hit or stay? h(H)/s(S)`);
     let answer = readline.question();
 
     if (!['s','S','h','H'].includes(answer)) {
-      prompt(`Please input a vaild answer!`);
-    }
+      prompt(`Please input a valid answer!`);
+    } 
     if (['h','H'].includes(answer)) {
       dealCards(deck,'player',1);
       printCards('player');
@@ -175,18 +174,19 @@ function playAgain() {
   let answer = readline.question();
 
   while (!['y','Y','n','N'].includes(answer)) {
-    prompt(`A vaild answer is required!`);
+    prompt(`A valid answer is required!`);
     answer = readline.question();
   }
   return ['y','Y'].includes(answer);
 }
 
 function trackMatchScore(who) {
-  matchScore[who] ++;
+  matchScore[who]++;
 }
 
 function decideGrandWinner() {
-  return Object.keys(matchScore).filter(who => matchScore[who] === WINNING_SCORE);
+  return Object.keys(matchScore).filter(who =>
+    matchScore[who] === WINNING_SCORE);
 }
 
 function resetMatch() {
@@ -196,19 +196,20 @@ function resetMatch() {
 }
 
 function stopMatch() {
-  return matchScore.player === WINNING_SCORE || matchScore.dealer === WINNING_SCORE;
+  return matchScore.player === WINNING_SCORE
+         || matchScore.dealer === WINNING_SCORE;
 }
 
 function newRound() {
   let deck = initializeDeck();
   shuffleDeck(deck);
-  
+
   resetHoldCards('player');
   resetHoldCards('dealer');
 
   dealCards(deck,'player',2);
   dealCards(deck,'dealer',2);
- 
+
   printInitialHands();
   playerTurn(deck);
   if (!busted(holdCards.player)) dealerTurn(deck);
@@ -219,19 +220,19 @@ function newMatch() {
 
   console.clear();
   printWelcomeMessage();
-  
-  while(true) {
+
+  while (true) {
     pressEnterToContinue();
-    roundNum ++;
+    roundNum++;
     prompt(`-----  Round  ${roundNum}  ------`);
     newRound();
     prompt(`+++++++++++++++++++++++++++++++++++++`);
     prompt(`Player Score: ${matchScore.player}\t Dealer Score: ${matchScore.dealer}`);
     prompt(`+++++++++++++++++++++++++++++++++++++`);
     if (stopMatch()) {
-      prompt(`:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::`)
+      prompt(`:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::`);
       prompt(`:::::MATCH FINISHED :::: ${decideGrandWinner()}  is the GRAND WINNER!!!`);
-      prompt(`:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::`)
+      prompt(`:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::`);
       break;
     }
   }
